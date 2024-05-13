@@ -396,3 +396,83 @@ function MyComponent() {
 - Refs are commonly used for accessing DOM elements, managing focus, triggering animations, or communicating with child components.
 
 While refs provide a way to access and interact with the DOM, it's important to use them sparingly and favor declarative approaches when possible. Direct DOM manipulation should generally be avoided in React, as it can lead to harder-to-maintain code and potential performance issues.
+
+
+
+
+
+
+
+## Coding 
+Interviewer:
+Could you describe a scenario where you've had to implement a feature that involves multiple select options, such as selecting a city and its corresponding zones, and how you approached it using React?
+```jsx
+import React, { useState } from 'react';
+
+const citiesData = {
+  'New York': ['Manhattan', 'Brooklyn', 'Queens'],
+  'Los Angeles': ['Hollywood', 'Downtown', 'Santa Monica'],
+  Chicago: ['Loop', 'Near North Side', 'West Loop'],
+};
+
+const LoadZoneData = () => {
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedZone, setSelectedZone] = useState('');
+  const [zones, setZones] = useState([]);
+
+  const handleCityChange = (e) => {
+    const city = e.target.value;
+    setSelectedCity(city);
+    setSelectedZone('');
+    setZones(citiesData[city] || []);
+  };
+
+  const handleZoneChange = (e) => {
+    setSelectedZone(e.target.value);
+  };
+
+  return (
+    <div className="container">
+      <h1>Select City and Zone</h1>
+      <div className="select-container">
+        <label htmlFor="citySelect">Select City:</label>
+        <select
+          id="citySelect"
+          value={selectedCity}
+          onChange={handleCityChange}
+        >
+          <option value="">Select a city</option>
+          {Object.keys(citiesData).map((city) => (
+            <option key={city} value={city}>
+              {city}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="select-container">
+        <label htmlFor="zoneSelect">Select Zone:</label>
+        <select
+          id="zoneSelect"
+          value={selectedZone}
+          onChange={handleZoneChange}
+          disabled={!selectedCity || zones.length === 0}
+        >
+          <option value="">Select a zone</option>
+          {zones.map((zone) => (
+            <option key={zone} value={zone}>
+              {zone}
+            </option>
+          ))}
+        </select>
+      </div>
+      {!selectedCity && <p className="error">Please select a city</p>}
+      {selectedCity && zones.length === 0 && (
+        <p className="error">No zones available for selected city</p>
+      )}
+    </div>
+  );
+};
+
+export default LoadZoneData;
+```
+

@@ -475,4 +475,45 @@ const LoadZoneData = () => {
 
 export default LoadZoneData;
 ```
+### Interviewer: Can you explain how the sort() function works in JavaScript?
 
+#### Description of sort() function:
+
+The sort() function in JavaScript is used to sort the elements of an array in place and returns the sorted array. By default, the elements are sorted in ascending order, based on their UTF-16 code unit values. However, you can provide a custom sorting function as an argument to define your own sorting criteria.
+
+#### Why use sort() and when to use it:
+
+sort() is incredibly useful whenever you need to organize elements in an array, especially when dealing with data that needs to be presented in a specific order. Whether it's numbers, strings, or complex objects, sort() provides a convenient way to arrange data according to various criteria. It's particularly handy in scenarios like generating sorted lists, implementing search algorithms, or arranging user-generated content.
+
+Real-life example use of sort() using React:
+
+In a React application, imagine you have an array of objects representing tasks in a to-do list, and you want to display them sorted by priority. You can utilize sort() to dynamically reorder the tasks based on their priority attribute.
+
+import React, { useState } from 'react';
+```
+const ToDoList = () => {
+  const [tasks, setTasks] = useState([
+    { id: 1, description: 'Complete assignment', priority: 2 },
+    { id: 2, description: 'Prepare for meeting', priority: 1 },
+    { id: 3, description: 'Send out emails', priority: 3 }
+  ]);
+
+  const sortByPriority = () => {
+    const sortedTasks = [...tasks].sort((a, b) => a.priority - b.priority);
+    setTasks(sortedTasks);
+  };
+
+  return (
+    <div>
+      <button onClick={sortByPriority}>Sort by Priority</button>
+      <ul>
+        {tasks.map(task => (
+          <li key={task.id}>{task.description} (Priority: {task.priority})</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default ToDoList;
+```

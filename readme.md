@@ -403,6 +403,7 @@ While refs provide a way to access and interact with the DOM, it's important to 
 
 
 
+
 ## Coding 
 Interviewer:
 Could you describe a scenario where you've had to implement a feature that involves multiple select options, such as selecting a city and its corresponding zones, and how you approached it using React?
@@ -517,3 +518,80 @@ const ToDoList = () => {
 
 export default ToDoList;
 ```
+
+### Interviewer: Can you explain the useEffect lifecycle method in React? When and why do you use it, and could you provide a real-life example?
+
+#### Description of React useEffect Lifecycle Method
+
+**useEffect** is a hook in React that lets you perform side effects in function components. It serves as a combination of several lifecycle methods from class components, including `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount`.
+
+#### Why Use useEffect?
+
+- **Side Effects:** It handles side effects like data fetching, subscriptions, manual DOM manipulations, and more.
+- **Dependency Management:** It provides an easy way to run effects conditionally based on dependencies, preventing unnecessary operations and optimizing performance.
+- **Cleanup:** It allows for cleanup of effects, ensuring that resources are properly managed and avoiding memory leaks.
+
+#### When to Use useEffect?
+
+- **Fetching Data:** When you need to fetch data from an API after the component mounts.
+- **Setting Up Subscriptions:** When you need to set up subscriptions to external data sources.
+- **Updating DOM:** When you need to manually update the DOM in response to state or prop changes.
+- **Cleanup:** When you need to perform cleanup operations like unsubscribing from a data source or clearing timers.
+
+#### Real-Life Example of useEffect
+Consider a scenario where you need to fetch and display a list of users from an API when a component mounts. Additionally, you want to clean up the data when the component unmounts.
+
+```javascript
+import React, { useState, useEffect } from 'react';
+
+const UserList = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Function to fetch user data from API
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        const data = await response.json();
+        setUsers(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+
+    // Cleanup function to reset state when component unmounts
+    return () => {
+      setUsers([]);
+      setLoading(true);
+    };
+  }, []); // Empty dependency array means this effect runs once after the initial render
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h2>User List</h2>
+      <ul>
+        {users.map(user => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default UserList;
+```
+
+In this example:
+
+1. **Fetching Data:** The `fetchUsers` function fetches user data from an API when the component mounts.
+2. **Empty Dependency Array:** The empty dependency array (`[]`) ensures that the effect runs only once, similar to `componentDidMount`.
+3. **Cleanup Function:** The cleanup function resets the state when the component unmounts, preventing potential memory leaks or unwanted behavior.
+
